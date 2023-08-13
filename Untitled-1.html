@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Repair Cost Calculator</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: black; /* Set the background color to black */
+    margin: 0;
+    display: flex;
+    min-height: 100vh;
+    color: black; /* Set the text color to black */
+  }
+  #sidebar {
+    background-color: #2f2f2f;
+    width: 250px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    color: white; /* Set the text color to white */
+  }
+  #calculator {
+    text-align: center;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 70%;
+    margin: 0 20px;
+  }
+  h1 {
+    margin-top: 0;
+  }
+  .part {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between; /* Align name and price to opposite ends */
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  .part img {
+    max-width: 50px;
+    margin-right: 10px;
+  }
+  .part label {
+    font-weight: bold;
+    color: black; /* Set the name text color to black */
+  }
+  .part .description {
+    color: #555;
+  }
+  .part .price {
+    color: #007bff;
+    text-align: right;
+    flex-grow: 1;
+  }
+  #logo {
+    max-width: 150px;
+    margin-bottom: 20px;
+  }
+  #page2Button {
+    background-color: grey;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  #discordButton {
+    background-color: #7289DA;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  #discordButton img {
+    max-width: 20px;
+    margin-right: 10px;
+  }
+</style>
+</head>
+<body>
+  <div id="sidebar">
+    <img id="logo" src="logo.png" alt="Logo"> <!-- Replace "logo.png" with your logo image path -->
+    <button id="page2Button" onclick="window.location.href='page2.html'">Go to Page 2</button>
+    <a id="discordButton" href="https://discord.gg/DbASFatQ5G" target="_blank">
+      <img src="discord-logo.png" alt="Discord Logo">
+      Join our Discord
+    </a>
+    <p>Welcome to our Repair Cost Calculator!</p>
+  </div>
+  <div id="calculator">
+    <h1>Repair Cost Calculator</h1>
+    <div id="partsList">
+      <!-- Car parts will be dynamically added here -->
+    </div>
+    <p>Total Repair Cost: <span id="totalCost">0</span></p>
+  </div>
+  <script>
+    const partsList = document.getElementById("partsList");
+    const totalCostDisplay = document.getElementById("totalCost");
+    const partCosts = {
+      wheel: 100,
+      door: 200,
+      window: 150,
+      // Add more part costs as needed
+    };
+    
+    // Define an object to map parts to image paths, names, and descriptions
+    const partData = {
+      wheel: { image: "wheel.png", name: "Wheel", price: 100, description: "High-quality replacement wheel for your vehicle." },
+      door: { image: "door.png", name: "Door", price: 200, description: "Replacement door panel with built-in speakers." },
+      window: { image: "window.png", name: "Window", price: 150, description: "Replacement window glass for your vehicle." },
+      // Add more parts data as needed
+    };
+
+    // Create a function to update the total cost
+    function updateTotalCost() {
+      const selectedParts = Array.from(document.querySelectorAll('input[name="part"]:checked')).map(input => input.value);
+      const totalCost = selectedParts.reduce((total, part) => total + partCosts[part], 0);
+      totalCostDisplay.textContent = totalCost;
+    }
+
+    // Create car part checkboxes dynamically
+    for (const part in partData) {
+      const partDiv = document.createElement("div");
+      partDiv.className = "part";
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.name = "part";
+      checkbox.value = part;
+      checkbox.addEventListener("change", updateTotalCost);
+      const img = document.createElement("img");
+      img.src = partData[part].image; // Use the image path from the partData object
+      img.alt = part;
+      const label = document.createElement("label");
+      label.textContent = partData[part].name; // Use the name from the partData object
+      const description = document.createElement("p");
+      description.className = "description";
+      description.textContent = partData[part].description; // Use the description from the partData object
+      const priceSpan = document.createElement("span");
+      priceSpan.className = "price";
+      priceSpan.textContent = "" + partData[part].price; // Use the price from the partData object
+      
+      const nameAndImageDiv = document.createElement("div");
+      nameAndImageDiv.style.display = "flex";
+      nameAndImageDiv.style.flexDirection = "column";
+      nameAndImageDiv.appendChild(img);
+      nameAndImageDiv.appendChild(label);
+      nameAndImageDiv.appendChild(description);
+      
+      partDiv.appendChild(nameAndImageDiv);
+      partDiv.appendChild(priceSpan);
+      partDiv.appendChild(checkbox);
+      
+      partsList.appendChild(partDiv);
+      
+    }
+  </script>
+</body>
+</html>
